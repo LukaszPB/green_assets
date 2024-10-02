@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
@@ -15,7 +17,7 @@ public class Auction {
     @PrimaryKeyJoinColumn
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
     private BigDecimal bid;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -24,4 +26,6 @@ public class Auction {
     private Item item;
     @ManyToOne
     private Account winningAccount;
+    @ManyToOne
+    private Account seller;
 }

@@ -2,10 +2,7 @@ package com.example.green_assets.service;
 
 import com.example.green_assets.model.Item;
 import com.example.green_assets.modelDTO.ItemDTO;
-import com.example.green_assets.repo.AccountRepo;
-import com.example.green_assets.repo.ItemRepo;
-import com.example.green_assets.repo.RegionRepo;
-import com.example.green_assets.repo.TypeRepo;
+import com.example.green_assets.repo.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +18,7 @@ public class ItemService {
     private final RegionRepo regionRepo;
     private final TypeRepo typeRepo;
     private final AccountRepo accountRepo;
+    private final MethodOfCollectionRepo methodOfCollectionRepo;
     public Item getItemById(UUID id) {
         return itemRepo.getReferenceById(id);
     }
@@ -40,7 +38,7 @@ public class ItemService {
                 .weight(itemDTO.getWeight())
                 .measurements(itemDTO.getMeasurements())
                 .pickupLocation(itemDTO.getPickupLocation())
-                .methodOfCollection(itemDTO.getMethodOfCollection())
+                .methodOfCollection(methodOfCollectionRepo.findByName(itemDTO.getMethodOfCollection()))
                 .region(regionRepo.findByName(itemDTO.getRegion()))
                 .account(accountRepo.getReferenceById(itemDTO.getAccountId()))
                 .type(typeRepo.findByName(itemDTO.getName()))
@@ -55,7 +53,7 @@ public class ItemService {
         item.setWeight(itemDTO.getWeight());
         item.setMeasurements(itemDTO.getMeasurements());
         item.setPickupLocation(itemDTO.getPickupLocation());
-        item.setMethodOfCollection(itemDTO.getMethodOfCollection());
+        item.setMethodOfCollection(methodOfCollectionRepo.findByName(itemDTO.getMethodOfCollection()));
         item.setRegion(regionRepo.findByName(itemDTO.getRegion()));
         item.setAccount(accountRepo.getReferenceById(itemDTO.getAccountId()));
         item.setType(typeRepo.findByName(itemDTO.getName()));
@@ -73,7 +71,7 @@ public class ItemService {
                 .weight(item.getWeight())
                 .measurements(item.getMeasurements())
                 .pickupLocation(item.getPickupLocation())
-                .methodOfCollection(item.getMethodOfCollection())
+                .methodOfCollection(item.getMethodOfCollection().getName())
                 .region(item.getRegion().getName())
                 .accountId(item.getAccount().getId())
                 .type(item.getType().getName())

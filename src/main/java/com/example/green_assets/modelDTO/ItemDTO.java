@@ -18,6 +18,6 @@ public class ItemDTO {
     private String pickupLocation;
     private String methodOfCollection;
     private String region;
-    private Long accountId;
+    private UUID accountId;
     private String type;
 }

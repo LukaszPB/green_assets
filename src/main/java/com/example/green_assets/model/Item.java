@@ -22,9 +22,10 @@ public class Item {
     private Integer weight;
     private String measurements;
     private String pickupLocation;
-    private String methodOfCollection;
     @Column(columnDefinition = "BOOLEAN DEFAULT true")
     private Boolean modifiable;
+    @ManyToOne(optional = false)
+    private MethodOfCollection methodOfCollection;
     @ManyToOne(optional = false)
     private Region region;
     @ManyToOne(optional = false)
@@ -35,6 +36,11 @@ public class Item {
     private Set<Photo> photoSet;
     @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
     private Set<Auction> auctionSet;
-    @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
-    private Set<Offer> offerSet;
+    @ManyToMany()
+    @JoinTable(
+            name = "item_offer",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "offer_id")
+    )
+    private Set<Offer> offers;
 }

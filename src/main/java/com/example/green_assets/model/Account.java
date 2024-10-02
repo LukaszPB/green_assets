@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -14,16 +15,18 @@ import java.util.Set;
 public class Account {
     @PrimaryKeyJoinColumn
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String name;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    private String firstName;
+    private String lastName;
     private String nip;
     private String phoneNumber;
-
     @ManyToOne(optional = false)
     private Role role;
     @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE)
-    private Set<Offer> offerSet;
+    private Set<Offer> purchaseOffers;
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
+    private Set<Offer> sellerOffers;
     @OneToMany(mappedBy = "winningAccount", cascade = CascadeType.REMOVE)
     private Set<Auction> auctionSet;
     @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)

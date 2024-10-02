@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -12,8 +13,8 @@ import java.util.Set;
 public class Type {
     @PrimaryKeyJoinColumn
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     @OneToMany(mappedBy = "type", cascade = CascadeType.REMOVE)
     private Set<Item> itemSet;
