@@ -20,10 +20,14 @@ public class Offer {
     private UUID id;
     private BigDecimal price;
     private Boolean isAccepted;
+    private String pickupLocation;
+    private String description;
     @ManyToOne(optional = false)
     private Account client;
     @ManyToOne(optional = false)
-    private Account seller;
-    @ManyToMany(mappedBy = "offers")
-    private Set<Item> items;
+    private MethodOfCollection methodOfCollection;
+    @ManyToOne(optional = false)
+    private Region region;
+    @OneToMany(mappedBy = "offer", cascade = CascadeType.REMOVE)
+    private Set<ItemOffer> items;
 }

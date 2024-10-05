@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -22,10 +23,14 @@ public class Auction {
     private LocalDate startDate;
     private LocalDate endDate;
     private Boolean hasEnded;
-    @ManyToOne(optional = false)
-    private Item item;
+    private String pickupLocation;
+    private String description;
     @ManyToOne
     private Account winningAccount;
-    @ManyToOne
-    private Account seller;
+    @ManyToOne(optional = false)
+    private MethodOfCollection methodOfCollection;
+    @ManyToOne(optional = false)
+    private Region region;
+    @OneToMany(mappedBy = "auction", cascade = CascadeType.REMOVE)
+    private Set<ItemAuction> items;
 }

@@ -16,5 +16,7 @@ public class MethodOfCollection {
     private UUID id;
     private String name;
     @OneToMany(mappedBy = "methodOfCollection", cascade = CascadeType.REMOVE)
-    private Set<Item> itemSet;
+    private Set<Offer> offers;
+    @OneToMany(mappedBy = "methodOfCollection", cascade = CascadeType.REMOVE)
+    private Set<Auction> auctions;
 }

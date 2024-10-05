@@ -3,6 +3,7 @@ package com.example.green_assets.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,28 +20,19 @@ public class Item {
     private UUID id;
     private String name;
     private String description;
-    private Integer weight;
+    private BigDecimal weight;
+    private Integer quantity;
     private String measurements;
-    private String pickupLocation;
     @Column(columnDefinition = "BOOLEAN DEFAULT true")
     private Boolean modifiable;
     @ManyToOne(optional = false)
-    private MethodOfCollection methodOfCollection;
-    @ManyToOne(optional = false)
-    private Region region;
-    @ManyToOne(optional = false)
-    private Account account;
+    private Account owner;
     @ManyToOne(optional = false)
     private Type type;
     @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
-    private Set<Photo> photoSet;
+    private Set<Photo> photos;
     @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
-    private Set<Auction> auctionSet;
-    @ManyToMany()
-    @JoinTable(
-            name = "item_offer",
-            joinColumns = @JoinColumn(name = "item_id"),
-            inverseJoinColumns = @JoinColumn(name = "offer_id")
-    )
-    private Set<Offer> offers;
+    private Set<ItemOffer> offers;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
+    private Set<ItemAuction> auctions;
 }

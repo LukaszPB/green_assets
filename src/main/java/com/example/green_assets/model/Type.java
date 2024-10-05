@@ -17,5 +17,5 @@ public class Type {
     private UUID id;
     private String name;
     @OneToMany(mappedBy = "type", cascade = CascadeType.REMOVE)
-    private Set<Item> itemSet;
+    private Set<Item> items;
 }

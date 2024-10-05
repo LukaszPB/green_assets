@@ -47,20 +47,18 @@ INSERT INTO "account" (id, first_name, last_name, nip, phone_number, role_id)
         (gen_random_uuid(), 'Grzegorz', 'Mikura', '7361896694','+48149605553',(SELECT id FROM "role" WHERE name = 'user'));
 
 --Item
-INSERT INTO "item" (id, name, description, weight, measurements, pickup_location, method_of_collection_id, modifiable, region_id, account_id, type_id)
+INSERT INTO "item" (id, name, description, weight, quantity, measurements, modifiable, owner_id, type_id)
 VALUES
     (
      gen_random_uuid(),
-    'szklane rurki',
-    'szklane rurki',
-    12,
-    '12x10',
-    'Poznańska 38b',
-    (SELECT id FROM "method_of_collection" WHERE name = 'odbiór osobisty'),
-    true,
-    (SELECT id FROM "region" WHERE name = 'Podlasie'),
-    (SELECT id FROM "account" WHERE phone_number = '+48914216054'),
-    (SELECT id FROM "type" WHERE name = 'szkło')
+     'szklane rurki',
+     'szklane rurki',
+     12,
+     40,
+     '12x10',
+     true,
+     (SELECT id FROM "account" WHERE phone_number = '+48914216054'),
+     (SELECT id FROM "type" WHERE name = 'szkło')
     );
 
 --Photo
@@ -75,26 +73,30 @@ VALUES
      );
 
 --Offer
-INSERT INTO "offer" (id, price, is_accepted, client_id, seller_id)
+INSERT INTO "offer" (id, price, is_accepted, pickup_location, description, client_id, method_of_collection_id, region_id)
 VALUES
     (
     gen_random_uuid(),
     12.56,
     false,
+    'Poznańska 38b',
+    'Odbiór możliwy tylko we wtorki',
     (SELECT id FROM "account" WHERE phone_number = '+48914216054'),
-    (SELECT id FROM "account" WHERE phone_number = '+48149605553')
+    (SELECT id FROM "method_of_collection" WHERE name = 'odbiór osobisty'),
+    (SELECT id FROM "region" WHERE name = 'Podlasie')
     );
 
 --Item-Offer
-INSERT INTO "item_offer" (item_id, offer_id)
+INSERT INTO "item_offer" (quantity, item_id, offer_id)
 VALUES
     (
+        12,
         (SELECT id FROM "item" WHERE name = 'szklane rurki'),
         (SELECT id FROM "offer" WHERE price = 12.56)
     );
 
 --Auction
-INSERT INTO "auction" (id, bid, start_date, end_date, has_ended, item_id, winning_account_id, seller_id)
+INSERT INTO "auction" (id, bid, start_date, end_date, has_ended, pickup_location, description, winning_account_id, method_of_collection_id, region_id)
 VALUES
     (
         gen_random_uuid(),
@@ -102,7 +104,18 @@ VALUES
         '2024-10-02',
         '2024-10-12',
         false,
+        'Mieszka 12a',
+        'Na teren zakładu mogą wjechać jedynie pojazdy poniżej 8t',
+        (SELECT id FROM "account" WHERE phone_number = '+48149605553'),
+        (SELECT id FROM "method_of_collection" WHERE name = 'dostawa przez sprzedawcę'),
+        (SELECT id FROM "region" WHERE name = 'Mazowsze')
+    );
+
+--Item-Auction
+INSERT INTO "item_auction" (quantity, item_id, auction_id)
+VALUES
+    (
+        24,
         (SELECT id FROM "item" WHERE name = 'szklane rurki'),
-        (SELECT id FROM "account" WHERE phone_number = '+48914216054'),
-        (SELECT id FROM "account" WHERE phone_number = '+48149605553')
+        (SELECT id FROM "auction" WHERE bid = 145.56)
     );

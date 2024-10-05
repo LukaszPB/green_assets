@@ -36,11 +36,10 @@ public class ItemService {
                 .name(itemDTO.getName())
                 .description(itemDTO.getDescription())
                 .weight(itemDTO.getWeight())
+                .quantity(itemDTO.getQuantity())
                 .measurements(itemDTO.getMeasurements())
-                .pickupLocation(itemDTO.getPickupLocation())
-                .methodOfCollection(methodOfCollectionRepo.findByName(itemDTO.getMethodOfCollection()))
-                .region(regionRepo.findByName(itemDTO.getRegion()))
-                .account(accountRepo.getReferenceById(itemDTO.getAccountId()))
+                .modifiable(itemDTO.getModifiable())
+                .owner(accountRepo.getReferenceById(itemDTO.getAccountId()))
                 .type(typeRepo.findByName(itemDTO.getName()))
                 .build();
         itemRepo.save(item);
@@ -51,11 +50,10 @@ public class ItemService {
         item.setName(itemDTO.getName());
         item.setDescription(itemDTO.getDescription());
         item.setWeight(itemDTO.getWeight());
+        item.setQuantity(itemDTO.getQuantity());
         item.setMeasurements(itemDTO.getMeasurements());
-        item.setPickupLocation(itemDTO.getPickupLocation());
-        item.setMethodOfCollection(methodOfCollectionRepo.findByName(itemDTO.getMethodOfCollection()));
-        item.setRegion(regionRepo.findByName(itemDTO.getRegion()));
-        item.setAccount(accountRepo.getReferenceById(itemDTO.getAccountId()));
+        item.setModifiable(itemDTO.getModifiable());
+        item.setOwner(accountRepo.getReferenceById(itemDTO.getAccountId()));
         item.setType(typeRepo.findByName(itemDTO.getName()));
 
         itemRepo.save(item);
@@ -69,11 +67,10 @@ public class ItemService {
                 .name(item.getName())
                 .description(item.getDescription())
                 .weight(item.getWeight())
+                .quantity(item.getQuantity())
                 .measurements(item.getMeasurements())
-                .pickupLocation(item.getPickupLocation())
-                .methodOfCollection(item.getMethodOfCollection().getName())
-                .region(item.getRegion().getName())
-                .accountId(item.getAccount().getId())
+                .modifiable(item.getModifiable())
+                .accountId(item.getOwner().getId())
                 .type(item.getType().getName())
                 .build();
     }

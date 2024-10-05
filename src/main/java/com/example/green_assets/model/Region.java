@@ -17,5 +17,7 @@ public class Region {
     private UUID id;
     private String name;
     @OneToMany(mappedBy = "region", cascade = CascadeType.REMOVE)
-    private Set<Item> itemSet;
+    private Set<Offer> offers;
+    @OneToMany(mappedBy = "region", cascade = CascadeType.REMOVE)
+    private Set<Auction> auctions;
 }

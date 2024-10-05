@@ -25,10 +25,8 @@ public class Account {
     private Role role;
     @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE)
     private Set<Offer> purchaseOffers;
-    @OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
-    private Set<Offer> sellerOffers;
     @OneToMany(mappedBy = "winningAccount", cascade = CascadeType.REMOVE)
-    private Set<Auction> auctionSet;
-    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
-    private Set<Item> itemSet;
+    private Set<Auction> winningAuctions;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    private Set<Item> items;
 }
