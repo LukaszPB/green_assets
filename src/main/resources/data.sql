@@ -38,13 +38,17 @@ VALUES
     (gen_random_uuid(), 'dostawa przez sprzedawcę');
 
 --Account
-INSERT INTO "account" (id, first_name, last_name, nip, phone_number, role_id)
+INSERT INTO "account" (id, name, nip, phone_number, email, postal_code, city, street, region_id, role_id)
     VALUES
-        (gen_random_uuid(), 'Adam', 'Kowalski', '1150469650','+48914216054',(SELECT id FROM "role" WHERE name = 'admin')),
-        (gen_random_uuid(), 'Tomasz', 'Nowak', '8837890289','+48479054900',(SELECT id FROM "role" WHERE name = 'user')),
-        (gen_random_uuid(), 'Krystian', 'Niedzielski', '5750867332','+48293827763',(SELECT id FROM "role" WHERE name = 'user')),
-        (gen_random_uuid(), 'Monika', 'Zdun', '7344968623','+48158260050',(SELECT id FROM "role" WHERE name = 'user')),
-        (gen_random_uuid(), 'Grzegorz', 'Mikura', '7361896694','+48149605553',(SELECT id FROM "role" WHERE name = 'user'));
+        (gen_random_uuid(), 'admin', null, null, null, null, null, null,
+         (SELECT id FROM "region" WHERE name = 'Mazowsze'),
+         (SELECT id FROM "role" WHERE name = 'admin')),
+        (gen_random_uuid(), 'adampol', '1150469650', '+48914216054','adampol@gmail.com', '62-095', 'Warszawa', 'Dąbrowa 22',
+         (SELECT id FROM "region" WHERE name = 'Mazowsze'),
+         (SELECT id FROM "role" WHERE name = 'user')),
+        (gen_random_uuid(), 'wiesbud', '8837890289', '+48479054900','wiesbud@gmail.com', '32-014', 'Białystok', 'Legionowa 2',
+         (SELECT id FROM "region" WHERE name = 'Podlasie'),
+         (SELECT id FROM "role" WHERE name = 'user'));
 
 --Item
 INSERT INTO "item" (id, name, description, weight, quantity, measurements, modifiable, owner_id, type_id)
@@ -57,7 +61,7 @@ VALUES
      40,
      '12x10',
      true,
-     (SELECT id FROM "account" WHERE phone_number = '+48914216054'),
+     (SELECT id FROM "account" WHERE name = 'adampol'),
      (SELECT id FROM "type" WHERE name = 'szkło')
     );
 
@@ -81,7 +85,7 @@ VALUES
     false,
     'Poznańska 38b',
     'Odbiór możliwy tylko we wtorki',
-    (SELECT id FROM "account" WHERE phone_number = '+48914216054'),
+    (SELECT id FROM "account" WHERE name = 'adampol'),
     (SELECT id FROM "method_of_collection" WHERE name = 'odbiór osobisty'),
     (SELECT id FROM "region" WHERE name = 'Podlasie')
     );
@@ -106,7 +110,7 @@ VALUES
         false,
         'Mieszka 12a',
         'Na teren zakładu mogą wjechać jedynie pojazdy poniżej 8t',
-        (SELECT id FROM "account" WHERE phone_number = '+48149605553'),
+        (SELECT id FROM "account" WHERE name = 'adampol'),
         (SELECT id FROM "method_of_collection" WHERE name = 'dostawa przez sprzedawcę'),
         (SELECT id FROM "region" WHERE name = 'Mazowsze')
     );
@@ -118,4 +122,20 @@ VALUES
         24,
         (SELECT id FROM "item" WHERE name = 'szklane rurki'),
         (SELECT id FROM "auction" WHERE bid = 145.56)
+    );
+
+--Account-Auction
+INSERT INTO "account_auction" (account_id, auction_id)
+VALUES
+    (
+        (SELECT id FROM "account" WHERE name = 'adampol'),
+        (SELECT id FROM "auction" WHERE bid = 145.56)
+    );
+
+--Account-Contractor
+INSERT INTO "account_contractor" (account_id, contractor_id)
+VALUES
+    (
+        (SELECT id FROM "account" WHERE name = 'adampol'),
+        (SELECT id FROM "account" WHERE name = 'wiesbud')
     );

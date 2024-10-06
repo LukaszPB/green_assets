@@ -20,4 +20,6 @@ public class Region {
     private Set<Offer> offers;
     @OneToMany(mappedBy = "region", cascade = CascadeType.REMOVE)
     private Set<Auction> auctions;
+    @OneToMany(mappedBy = "region", cascade = CascadeType.REMOVE)
+    private Set<Account> accounts;
 }

@@ -33,4 +33,6 @@ public class Auction {
     private Region region;
     @OneToMany(mappedBy = "auction", cascade = CascadeType.REMOVE)
     private Set<ItemAuction> items;
+    @ManyToMany(mappedBy = "observedAuctions")
+    private Set<Account> accounts;
 }

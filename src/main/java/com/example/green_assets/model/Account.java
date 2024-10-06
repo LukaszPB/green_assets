@@ -17,10 +17,15 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String nip;
     private String phoneNumber;
+    private String email;
+    private String postalCode;
+    private String city;
+    private String street;
+    @ManyToOne(optional = false)
+    private Region region;
     @ManyToOne(optional = false)
     private Role role;
     @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE)
@@ -29,4 +34,20 @@ public class Account {
     private Set<Auction> winningAuctions;
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private Set<Item> items;
+    @ManyToMany()
+    @JoinTable(
+            name = "account_auction",
+            joinColumns = @JoinColumn(name ="account_id"),
+            inverseJoinColumns = @JoinColumn(name = "auction_id")
+    )
+    private Set<Auction> observedAuctions;
+    @ManyToMany()
+    @JoinTable(
+            name = "account_contractor",
+            joinColumns = @JoinColumn(name ="account_id"),
+            inverseJoinColumns = @JoinColumn(name = "contractor_id")
+    )
+    private Set<Account> contractors;
+    @ManyToMany(mappedBy = "contractors")
+    private Set<Account> accounts;
 }
