@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -14,8 +15,16 @@ import java.util.UUID;
 public class ItemController {
     private final ItemService itemService;
 
+    @GetMapping("/")
+    public List<ItemDTO> getItems() {
+        return itemService.getAllItemDTO(0,10);
+    }
+//    @GetMapping("/by_user")
+//    public List<ItemDTO> getUserItems(@AuthenticationPrincipal UserWithAccount user) {
+//        return itemService.getUserItemsDTO(user.getAccount().getId());
+//    }
     @GetMapping("/{id}")
-    public ItemDTO getItems(@PathVariable UUID id) {
+    public ItemDTO getItem(@PathVariable UUID id) {
         return itemService.getItemDTOById(id);
     }
     @PostMapping("/")

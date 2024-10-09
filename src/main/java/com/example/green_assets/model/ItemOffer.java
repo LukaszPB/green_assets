@@ -4,18 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 @Entity
 @Getter
 @Setter
 public class ItemOffer {
-    @Embeddable
-    class ItemOfferId implements Serializable {
-        private UUID itemId;
-        private UUID offerId;
-    }
     @EmbeddedId
     private ItemOfferId id;
     private Integer quantity;

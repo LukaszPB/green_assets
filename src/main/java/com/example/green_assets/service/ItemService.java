@@ -15,15 +15,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepo itemRepo;
-    private final RegionRepo regionRepo;
     private final TypeRepo typeRepo;
     private final AccountRepo accountRepo;
-    private final MethodOfCollectionRepo methodOfCollectionRepo;
     public Item getItemById(UUID id) {
         return itemRepo.getReferenceById(id);
     }
     public ItemDTO getItemDTOById(UUID id) {
         return convertToDTO(getItemById(id));
+    }
+    public List<ItemDTO> getUserItemsDTO(UUID id) {
+        List<Item> items = itemRepo.findByOwnerId(id);
+
+        return items.stream().map(this::convertToDTO).toList();
     }
     public List<ItemDTO> getAllItemDTO(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
