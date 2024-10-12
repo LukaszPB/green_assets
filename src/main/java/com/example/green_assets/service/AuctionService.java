@@ -1,9 +1,10 @@
 package com.example.green_assets.service;
 
+import com.example.green_assets.model.Account;
 import com.example.green_assets.model.Auction;
-import com.example.green_assets.model.Item;
 import com.example.green_assets.model.ItemAuction;
 import com.example.green_assets.modelDTO.AuctionDTO;
+import com.example.green_assets.modelDTO.BidRequest;
 import com.example.green_assets.modelDTO.ItemDTO;
 import com.example.green_assets.repo.*;
 import lombok.RequiredArgsConstructor;
@@ -30,19 +31,56 @@ public class AuctionService {
         return convertToDTO(getAuctionById(id));
     }
     public List<AuctionDTO> getUserAuctionsDTO(UUID id) {
-        List<Auction> auctions = auctionRepo.findByWinningAccountId(id);
-
-        return auctions.stream().map(this::convertToDTO).toList();
+        return accountRepo.getReferenceById(id)
+                .getWinningAuctions()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
     public List<AuctionDTO> getAllAuctionsDTO(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        List<Auction> auctions = auctionRepo.findAll(pageable).getContent();
-
-        return auctions.stream().map(this::convertToDTO).toList();
+        return auctionRepo
+                .findAll(pageable)
+                .getContent()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
     public List<ItemDTO> getItems(UUID id) {
-        List<Item> items = itemAuctionRepo.findByAuctionId(id).stream().map(ItemAuction::getItem).toList();
-        return items.stream().map(itemService::convertToDTO).toList();
+        return itemAuctionRepo
+                .findByAuctionId(id)
+                .stream()
+                .map(ItemAuction::getItem)
+                .map(itemService::convertToDTO)
+                .toList();
+    }
+    public List<AuctionDTO> getObservedAuctionsDTO(UUID id) {
+        return accountRepo
+                .getReferenceById(id)
+                .getObservedAuctions()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+    public void observe(UUID account_id, UUID auction_id) {
+        Account account = accountRepo.getReferenceById(account_id);
+        account.getObservedAuctions().add(auctionRepo.getReferenceById(auction_id));
+        accountRepo.save(account);
+    }
+    public void unobserve(UUID account_id, UUID auction_id) {
+        Account account = accountRepo.getReferenceById(account_id);
+        account.getObservedAuctions().remove(getAuctionById(auction_id));
+        accountRepo.save(account);
+    }
+    public void bid(UUID account_id, UUID auction_id, BidRequest bid) {
+        Auction auction = getAuctionById(auction_id);
+
+        if(auction.getBid().compareTo(bid.getAmount()) > 0)
+            return;
+
+        auction.setBid(bid.getAmount());
+        auction.setWinningAccount(accountRepo.getReferenceById(account_id));
+        auctionRepo.save(auction);
     }
     public void add(AuctionDTO auctionDTO) {
         Auction auction = Auction.builder()

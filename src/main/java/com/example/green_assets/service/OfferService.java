@@ -1,6 +1,5 @@
 package com.example.green_assets.service;
 
-import com.example.green_assets.model.Item;
 import com.example.green_assets.model.ItemOffer;
 import com.example.green_assets.model.Offer;
 import com.example.green_assets.modelDTO.ItemDTO;
@@ -30,20 +29,29 @@ public class OfferService {
         return convertToDTO(getOfferById(id));
     }
     public List<OfferDTO> getUserOffersDTO(UUID id) {
-        List<Offer> offers = offerRepo.findByClientId(id);
-
-        return offers.stream().map(this::convertToDTO).toList();
+        return accountRepo
+                .getReferenceById(id)
+                .getPurchaseOffers()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
     public List<OfferDTO> getAllOffersDTO(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        List<Offer> offers = offerRepo.findAll(pageable).getContent();
-
-        return offers.stream().map(this::convertToDTO).toList();
+        return offerRepo
+                .findAll(pageable)
+                .getContent()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
-
     public List<ItemDTO> getItems(UUID id) {
-        List<Item> items = itemOfferRepo.findByOfferId(id).stream().map(ItemOffer::getItem).toList();
-        return items.stream().map(itemService::convertToDTO).toList();
+        return itemOfferRepo
+                .findByOfferId(id)
+                .stream()
+                .map(ItemOffer::getItem)
+                .map(itemService::convertToDTO)
+                .toList();
     }
     public void add(OfferDTO offerDTO) {
         Offer offer = Offer.builder()

@@ -28,9 +28,19 @@ public class AccountService {
     }
     public List<AccountDTO> getAllAccountsDTO(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        List<Account> accounts = accountRepo.findAll(pageable).getContent();
-
-        return accounts.stream().map(this::convertToDTO).toList();
+        return accountRepo
+                .findAll(pageable)
+                .getContent()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+    public List<AccountDTO> getUserContractors(UUID id) {
+        return getAccountById(id)
+                .getContractors()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
     public void add(AccountDTO accountDTO) {
         Account account = Account.builder()

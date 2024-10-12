@@ -1,9 +1,11 @@
 package com.example.green_assets.controller;
 
+import com.example.green_assets.config.UserWithAccount;
 import com.example.green_assets.modelDTO.AccountDTO;
 import com.example.green_assets.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,10 @@ public class AccountController {
     public List<AccountDTO> getAuctions() {
         return accountService.getAllAccountsDTO(0,10);
     }
+    @GetMapping("/contractors")
+    public List<AccountDTO> getUserContractors(@AuthenticationPrincipal UserWithAccount user) {
+        return accountService.getUserContractors(user.getAccount().getId());
+    }
     @GetMapping("/{id}")
     public AccountDTO getAuction(@PathVariable UUID id) {
         return accountService.getAccountDTOById(id);
@@ -31,5 +37,10 @@ public class AccountController {
     public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody AccountDTO newAccount) {
         accountService.update(id,newAccount);
         return ResponseEntity.ok("Successfully updated");
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable UUID id) {
+        accountService.delete(id);
+        return ResponseEntity.ok("Successfully deleted");
     }
 }

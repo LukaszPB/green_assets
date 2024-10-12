@@ -3,6 +3,7 @@ package com.example.green_assets.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -47,7 +48,7 @@ public class Account {
             joinColumns = @JoinColumn(name ="account_id"),
             inverseJoinColumns = @JoinColumn(name = "contractor_id")
     )
-    private Set<Account> contractors;
-    @ManyToMany(mappedBy = "contractors")
-    private Set<Account> accounts;
+    private List<Account> contractors;
+//    @ManyToMany(mappedBy = "contractors")
+//    private List<Account> accounts;
 }

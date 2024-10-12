@@ -24,15 +24,21 @@ public class ItemService {
         return convertToDTO(getItemById(id));
     }
     public List<ItemDTO> getUserItemsDTO(UUID id) {
-        List<Item> items = itemRepo.findByOwnerId(id);
-
-        return items.stream().map(this::convertToDTO).toList();
+        return accountRepo
+                .getReferenceById(id)
+                .getItems()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
     public List<ItemDTO> getAllItemDTO(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        List<Item> items = itemRepo.findAll(pageable).getContent();
-
-        return items.stream().map(this::convertToDTO).toList();
+        return itemRepo
+                .findAll(pageable)
+                .getContent()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
     public void add(ItemDTO itemDTO) {
         Item item = Item.builder()
