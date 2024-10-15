@@ -27,8 +27,6 @@ public class Account {
     private String street;
     @ManyToOne(optional = false)
     private Region region;
-    @ManyToOne(optional = false)
-    private Role role;
     @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE)
     private Set<Offer> purchaseOffers;
     @OneToMany(mappedBy = "winningAccount", cascade = CascadeType.REMOVE)

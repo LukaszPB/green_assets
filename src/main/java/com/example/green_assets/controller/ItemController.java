@@ -3,9 +3,11 @@ package com.example.green_assets.controller;
 import com.example.green_assets.config.UserWithAccount;
 import com.example.green_assets.modelDTO.ItemDTO;
 import com.example.green_assets.service.ItemService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,12 +32,18 @@ public class ItemController {
         return itemService.getItemDTOById(id);
     }
     @PostMapping("/")
-    public ResponseEntity<String> addItem(@RequestBody ItemDTO newItem) {
+    public ResponseEntity<String> addItem(@RequestBody @Valid ItemDTO newItem, BindingResult result) {
+        if(result.hasErrors()) {
+            return ResponseEntity.badRequest().body("Invalid data: " + result.getAllErrors());
+        }
         itemService.add(newItem);
         return ResponseEntity.ok("Successfully added");
     }
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateItem(@PathVariable UUID id, @RequestBody ItemDTO newItem) {
+    public ResponseEntity<String> updateItem(@PathVariable UUID id, @RequestBody @Valid ItemDTO newItem, BindingResult result) {
+        if(result.hasErrors()) {
+            return ResponseEntity.badRequest().body("Invalid data: " + result.getAllErrors());
+        }
         itemService.update(id,newItem);
         return ResponseEntity.ok("Successfully updated");
     }

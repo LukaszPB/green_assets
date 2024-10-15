@@ -3,9 +3,11 @@ package com.example.green_assets.controller;
 import com.example.green_assets.config.UserWithAccount;
 import com.example.green_assets.modelDTO.AccountDTO;
 import com.example.green_assets.service.AccountService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,12 +31,18 @@ public class AccountController {
         return accountService.getAccountDTOById(id);
     }
     @PostMapping("/")
-    public ResponseEntity<String> add(@RequestBody AccountDTO newAccount) {
+    public ResponseEntity<String> add(@RequestBody @Valid AccountDTO newAccount, BindingResult result) {
+        if(result.hasErrors()) {
+            return ResponseEntity.badRequest().body("Invalid data: " + result.getAllErrors());
+        }
         accountService.add(newAccount);
         return ResponseEntity.ok("Successfully added");
     }
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody AccountDTO newAccount) {
+    public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody @Valid AccountDTO newAccount, BindingResult result) {
+        if(result.hasErrors()) {
+            return ResponseEntity.badRequest().body("Invalid data: " + result.getAllErrors());
+        }
         accountService.update(id,newAccount);
         return ResponseEntity.ok("Successfully updated");
     }

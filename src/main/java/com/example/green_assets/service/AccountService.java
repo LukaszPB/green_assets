@@ -4,7 +4,6 @@ import com.example.green_assets.model.Account;
 import com.example.green_assets.modelDTO.AccountDTO;
 import com.example.green_assets.repo.AccountRepo;
 import com.example.green_assets.repo.RegionRepo;
-import com.example.green_assets.repo.RoleRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +17,6 @@ import java.util.UUID;
 public class AccountService {
     private final AccountRepo accountRepo;
     private final RegionRepo regionRepo;
-    private final RoleRepo roleRepo;
-    private final ItemService itemService;
     public Account getAccountById(UUID id) {
         return accountRepo.getReferenceById(id);
     }
@@ -52,7 +49,6 @@ public class AccountService {
                 .city(accountDTO.getCity())
                 .street(accountDTO.getStreet())
                 .region(regionRepo.findByName(accountDTO.getRegion()))
-                .role(roleRepo.findByName(accountDTO.getRole()))
                 .build();
         accountRepo.save(account);
     }
@@ -67,7 +63,6 @@ public class AccountService {
         account.setCity(accountDTO.getCity());
         account.setStreet(accountDTO.getStreet());
         account.setRegion(regionRepo.findByName(accountDTO.getRegion()));
-        account.setRole(roleRepo.findByName(accountDTO.getRole()));
     }
     public void delete(UUID id) {
         accountRepo.delete(getAccountById(id));
@@ -83,7 +78,6 @@ public class AccountService {
                 .city(account.getCity())
                 .street(account.getStreet())
                 .region(account.getRegion().getName())
-                .role(account.getRole().getName())
                 .build();
     }
 }

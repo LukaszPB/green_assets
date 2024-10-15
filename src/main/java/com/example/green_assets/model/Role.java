@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +15,4 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-    @OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE)
-    private Set<Account> accounts;
 }

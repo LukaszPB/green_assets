@@ -5,9 +5,11 @@ import com.example.green_assets.modelDTO.AuctionDTO;
 import com.example.green_assets.modelDTO.BidRequest;
 import com.example.green_assets.modelDTO.ItemDTO;
 import com.example.green_assets.service.AuctionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,12 +52,18 @@ public class AuctionController {
         return ResponseEntity.ok("Successfully unobserved");
     }
     @PostMapping("/")
-    public ResponseEntity<String> add(@RequestBody AuctionDTO newAuction) {
+    public ResponseEntity<String> add(@RequestBody @Valid AuctionDTO newAuction, BindingResult result) {
+        if(result.hasErrors()) {
+            return ResponseEntity.badRequest().body("Invalid data: " + result.getAllErrors());
+        }
         auctionService.add(newAuction);
         return ResponseEntity.ok("Successfully added");
     }
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody AuctionDTO newAuction) {
+    public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody @Valid AuctionDTO newAuction, BindingResult result) {
+        if(result.hasErrors()) {
+            return ResponseEntity.badRequest().body("Invalid data: " + result.getAllErrors());
+        }
         auctionService.update(id,newAuction);
         return ResponseEntity.ok("Successfully updated");
     }

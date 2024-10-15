@@ -44,27 +44,22 @@ VALUES
     (gen_random_uuid(), 'Dostawa przez sprzedawcę');
 
 --Account
-INSERT INTO "account" (id, name, nip, phone_number, email, postal_code, city, street, region_id, role_id)
+INSERT INTO "account" (id, name, nip, phone_number, email, postal_code, city, street, region_id)
     VALUES
         (gen_random_uuid(), 'admin', null, null, null, null, null, null,
-         (SELECT id FROM "region" WHERE name = 'Mazowsze'),
-         (SELECT id FROM "role" WHERE name = 'admin')),
+         (SELECT id FROM "region" WHERE name = 'Mazowsze')),
 
         (gen_random_uuid(), 'adampol', '1150469650', '+48914216054','adampol@gmail.com', '62-095', 'Warszawa', 'Dąbrowa 22',
-         (SELECT id FROM "region" WHERE name = 'Mazowsze'),
-         (SELECT id FROM "role" WHERE name = 'user')),
+         (SELECT id FROM "region" WHERE name = 'Mazowsze')),
 
         (gen_random_uuid(), 'wiesbud', '8837890289', '+48479054900','wiesbud@gmail.com', '32-014', 'Białystok', 'Legionowa 2',
-         (SELECT id FROM "region" WHERE name = 'Podlasie'),
-         (SELECT id FROM "role" WHERE name = 'user')),
+         (SELECT id FROM "region" WHERE name = 'Podlasie')),
 
         (gen_random_uuid(), 'markpol', '3437890255', '+48329054915','markpol@gmail.com', '15-045', 'Kraków', 'Mieszka 31',
-         (SELECT id FROM "region" WHERE name = 'Małopolskie'),
-         (SELECT id FROM "role" WHERE name = 'user')),
+         (SELECT id FROM "region" WHERE name = 'Małopolskie')),
 
         (gen_random_uuid(), 'stalprom', '4337890282', '+48779054993','stalprom@gmail.com', '43-011', 'Opole', 'Kwiatowa 12',
-         (SELECT id FROM "region" WHERE name = 'Opolskie'),
-         (SELECT id FROM "role" WHERE name = 'user'));
+         (SELECT id FROM "region" WHERE name = 'Opolskie'));
 
 --Item
 INSERT INTO "item" (id, name, description, weight, quantity, measurements, modifiable, owner_id, type_id)

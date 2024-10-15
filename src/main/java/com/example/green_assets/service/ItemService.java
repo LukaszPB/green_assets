@@ -49,7 +49,7 @@ public class ItemService {
                 .measurements(itemDTO.getMeasurements())
                 .modifiable(itemDTO.getModifiable())
                 .owner(accountRepo.getReferenceById(itemDTO.getAccountId()))
-                .type(typeRepo.findByName(itemDTO.getName()))
+                .type(typeRepo.findByName(itemDTO.getType()))
                 .build();
         itemRepo.save(item);
     }

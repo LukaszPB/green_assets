@@ -4,9 +4,11 @@ import com.example.green_assets.config.UserWithAccount;
 import com.example.green_assets.modelDTO.ItemDTO;
 import com.example.green_assets.modelDTO.OfferDTO;
 import com.example.green_assets.service.OfferService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,12 +37,18 @@ public class OfferController {
         return offerService.getItems(id);
     }
     @PostMapping("/")
-    public ResponseEntity<String> add(@RequestBody OfferDTO newOffer) {
+    public ResponseEntity<String> add(@RequestBody @Valid OfferDTO newOffer, BindingResult result) {
+        if(result.hasErrors()) {
+            return ResponseEntity.badRequest().body("Invalid data: " + result.getAllErrors());
+        }
         offerService.add(newOffer);
         return ResponseEntity.ok("Successfully added");
     }
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody OfferDTO newOffer) {
+    public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody @Valid OfferDTO newOffer, BindingResult result) {
+        if(result.hasErrors()) {
+            return ResponseEntity.badRequest().body("Invalid data: " + result.getAllErrors());
+        }
         offerService.update(id,newOffer);
         return ResponseEntity.ok("Successfully updated");
     }

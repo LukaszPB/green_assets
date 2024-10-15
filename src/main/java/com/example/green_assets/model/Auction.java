@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,8 +20,8 @@ public class Auction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private BigDecimal bid;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private Boolean hasEnded;
     private String pickupLocation;
     private String description;
